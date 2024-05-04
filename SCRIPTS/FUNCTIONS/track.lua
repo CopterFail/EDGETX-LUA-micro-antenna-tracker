@@ -142,16 +142,16 @@ local function run_func()
                     end
                     
                     -- azimuth and elevation correction acording the max servo rotation
-                    local aOffset = model.getGlobalVariable(2, 0)-- vertical offse in deg when servo is in center posizion
-                    local eOffset = model.getGlobalVariable(3, 0)-- horizzontal offset in deg when servo is in center posizion
+                    local aOffset = model.getGlobalVariable(6, 0)-- vertical offse in deg when servo is in center posizion
+                    local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
                     
                     --map range of degrees to match range for servo
                     local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, eServoAngle, -1024, 1024))
                     local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
                     
                     --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
-                    model.setGlobalVariable(0, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
-                    model.setGlobalVariable(1, 0, elevationMapped)
+                    model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
+                    model.setGlobalVariable(5, 0, elevationMapped)
                     
                     if getRtcTime() > (nextTime + 10) then
                         nextTime = getRtcTime()
@@ -219,16 +219,16 @@ local function run_func()
             end
             
             -- azimuth and elevation correction acording the max servo rotation
-            local aOffset = model.getGlobalVariable(2, 0)-- vertical offse in deg when servo is in center posizion
-            local eOffset = model.getGlobalVariable(3, 0)-- horizzontal offset in deg when servo is in center posizion
+            local aOffset = model.getGlobalVariable(6, 0)-- vertical offse in deg when servo is in center posizion
+            local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
             
             --map range of degrees to match range for servo
             local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, eServoAngle, -1024, 1024))
             local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
             
             --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
-            model.setGlobalVariable(0, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
-            model.setGlobalVariable(1, 0, elevationMapped)
+            model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
+            model.setGlobalVariable(5, 0, elevationMapped)
             
             playTone(1000, 400, 400)
         
