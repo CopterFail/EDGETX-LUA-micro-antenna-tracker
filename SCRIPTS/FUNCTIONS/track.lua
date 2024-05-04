@@ -146,7 +146,7 @@ local function run_func()
                     local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
                     
                     --map range of degrees to match range for servo
-                    local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, eServoAngle, -1024, 1024))
+                    local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
                     local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
                     
                     --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
@@ -223,7 +223,7 @@ local function run_func()
             local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
             
             --map range of degrees to match range for servo
-            local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, eServoAngle, -1024, 1024))
+            local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
             local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
             
             --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
