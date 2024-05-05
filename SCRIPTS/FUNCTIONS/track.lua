@@ -54,8 +54,9 @@ local function getAzElDist(localGPSlat, localGPSlon, localGPSalt, remoteGPSlat, 
     local y = math.sin(dLon) * math.cos(lat2)
     local x = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(dLon)
     
-    local azimuthRadians = math.atan2(y, x)
-    local azimuthDegrees = ((azimuthRadians * r2d + 450)) % 360
+    local azimuthRadians = math.atan2(y, x) --azimuthRadians is in range -180 .. 180 
+    --local azimuthDegrees = ((azimuthRadians * r2d + 450)) % 360
+    local azimuthDegrees = (azimuthRadians * r2d + 180) % 360
     
     -- Earth radius in meters
     local R = 6371000
@@ -76,8 +77,9 @@ local function getAzElDist(localGPSlat, localGPSlon, localGPSalt, remoteGPSlat, 
     -- Elevation angle calculation in radians using Pythagoras theorem
     -- tan(elevation angle) = height difference / distance between the two GPS points
     -- elevation angle in degrees is atan(tan(elevation angle))
-    elevationAngleInRadians = math.atan(heightDifferenceInMeters / distanceInMeters)
-    elevationAngleInDegrees = 90 - (elevationAngleInRadians * 180.0 / math.pi)
+    elevationAngleInRadians = math.atan(heightDifferenceInMeters / distanceInMeters) --range is -90 .. 90 
+    --elevationAngleInDegrees = 90 - (elevationAngleInRadians * r2d)
+    elevationAngleInDegrees = (elevationAngleInRadians * r2d)
     
     return azimuthDegrees, elevationAngleInDegrees, distanceInMeters
 end
@@ -131,7 +133,8 @@ local function run_func()
                     azimuth, elevation, distance = getAzElDist(localGPS.lat, localGPS.lon, localGPS.alt, remoteGPS.lat, remoteGPS.lon, remoteGPS.alt)
                     
                     -- when the drone is close to the homepoint azimuth and elevation can become instable. I set to zero to allow calibration
-                    if distance < 10 then
+                    --if distance < 10 then
+                    if distance < 0 then
                         azimuth = 0
                         elevation = 0
                     end
@@ -146,8 +149,10 @@ local function run_func()
                     local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
                     
                     --map range of degrees to match range for servo
-                    local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
-                    local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
+                    --local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
+                    local azimuthMapped = math.floor(map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1024, 1024))
+                    --local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
+                    local elevationMapped = (math.floor(map_range(elevation + eOffset, 0, eServoAngle, -1024, 1024)))
                     
                     --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
                     model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
@@ -223,8 +228,8 @@ local function run_func()
             local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
             
             --map range of degrees to match range for servo
-            local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
-            local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
+            local azimuthMapped = math.floor(map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1024, 1024))
+            local elevationMapped = (math.floor(map_range(elevation + eOffset, 0, eServoAngle, -1024, 1024)))
             
             --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
             model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9

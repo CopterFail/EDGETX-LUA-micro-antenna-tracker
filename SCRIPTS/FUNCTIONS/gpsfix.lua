@@ -11,7 +11,7 @@
 
 aServoAngle = 360 -- max rotation angle of the azimut servo
 eServoAngle = 90 -- max rotation angle of the elevation servo
-useRemoteGPS = 2  -- 0: use local (TX radio) gps, 1: use remote (aircraft) gps, 2: use simulated GPS
+useRemoteGPS = 1  -- 0: use local (TX radio) gps, 1: use remote (aircraft) gps, 2: use simulated GPS
 minSats = 4       -- for test reduced to 4, set to 7, mimimum number of satellites required to consider the remote gps position aquired
  
  -- GV4 output for azimut servo
