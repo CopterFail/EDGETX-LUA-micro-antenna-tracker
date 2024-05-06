@@ -60,11 +60,14 @@ end
 --function called periodically
 local function run_func()
 
-    local eOffset = model.getGlobalVariable(7, 0) 
-    local elevationMapped = (math.floor(map_range(eOffset, 0, eServoAngle, -1024, 1024))) 
-    
+    local aOffset = model.getGlobalVariable(6, 0) * 1.8 + 180 -- map +-100 to 0..360
+    local eOffset = model.getGlobalVariable(7, 0) * 0.45 + 45 -- map +-100 to 0..90
+
+    local azimuthMapped = map_range(aOffset, 0, aServoAngle, -100, 100)
+    local elevationMapped = map_range(eOffset, 0, eServoAngle, -100, 100)
+
     -- set servo in zero positions
-    model.setGlobalVariable(4, 0, 0) 
+    model.setGlobalVariable(4, 0, azimuthMapped) 
     model.setGlobalVariable(5, 0, elevationMapped)
 
     if (useRemoteGPS == 1) then -- use aircraft GPS data

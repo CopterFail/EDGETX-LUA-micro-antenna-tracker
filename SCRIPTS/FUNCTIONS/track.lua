@@ -133,8 +133,7 @@ local function run_func()
                     azimuth, elevation, distance = getAzElDist(localGPS.lat, localGPS.lon, localGPS.alt, remoteGPS.lat, remoteGPS.lon, remoteGPS.alt)
                     
                     -- when the drone is close to the homepoint azimuth and elevation can become instable. I set to zero to allow calibration
-                    --if distance < 10 then
-                    if distance < 0 then
+                    if distance < 10 then
                         azimuth = 0
                         elevation = 0
                     end
@@ -145,14 +144,12 @@ local function run_func()
                     end
                     
                     -- azimuth and elevation correction acording the max servo rotation
-                    local aOffset = model.getGlobalVariable(6, 0)-- vertical offse in deg when servo is in center posizion
-                    local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
+                    local aOffset = model.getGlobalVariable(6, 0) * 1.8 + 180 -- vertical offset when servo is in center position map +-100 to 0..360
+                    local eOffset = model.getGlobalVariable(7, 0) * 0.45 + 45 -- horizzontal offset when servo is in center positionmap +-100 to 0..90
                     
                     --map range of degrees to match range for servo
-                    --local azimuthMapped = math.floor(map_range((azimuth - aOffset) % 360, 0, aServoAngle, -1024, 1024))
-                    local azimuthMapped = math.floor(map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1024, 1024))
-                    --local elevationMapped = (math.floor(map_range(90 - elevation + eOffset, 0, eServoAngle, -1024, 1024)))
-                    local elevationMapped = (math.floor(map_range(elevation + eOffset, 0, eServoAngle, -1024, 1024)))
+                    local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -100, 100)   -- 360 degree reduced to 200 is a real bad resolution of 1.8 degree
+                    local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -100, 100)
                     
                     --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
                     model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
@@ -224,12 +221,13 @@ local function run_func()
             end
             
             -- azimuth and elevation correction acording the max servo rotation
-            local aOffset = model.getGlobalVariable(6, 0)-- vertical offse in deg when servo is in center posizion
-            local eOffset = model.getGlobalVariable(7, 0)-- horizzontal offset in deg when servo is in center posizion
+            local aOffset = model.getGlobalVariable(6, 0) * 1.8 + 180 -- vertical offset when servo is in center position map +-100 to 0..360
+            local eOffset = model.getGlobalVariable(7, 0) * 0.45 + 45 -- horizzontal offset when servo is in center positionmap +-100 to 0..90
+
             
             --map range of degrees to match range for servo
-            local azimuthMapped = math.floor(map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1024, 1024))
-            local elevationMapped = (math.floor(map_range(elevation + eOffset, 0, eServoAngle, -1024, 1024)))
+            local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -100, 100)
+            local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -100, 100)
             
             --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
             model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
