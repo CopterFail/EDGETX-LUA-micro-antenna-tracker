@@ -148,8 +148,8 @@ local function run_func()
                     local eOffset = model.getGlobalVariable(7, 0) * 0.45 + 45 -- horizzontal offset when servo is in center positionmap +-100 to 0..90
                     
                     --map range of degrees to match range for servo
-                    local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -100, 100)   -- 360 degree reduced to 200 is a real bad resolution of 1.8 degree
-                    local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -100, 100)
+                    local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1000, 1000)   -- 360 degree reduced to 200 is a real bad resolution of 1.8 degree
+                    local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -1000, 1000)
                     
                     --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
                     model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
@@ -226,8 +226,8 @@ local function run_func()
 
             
             --map range of degrees to match range for servo
-            local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -100, 100)
-            local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -100, 100)
+            local azimuthMapped = map_range((azimuth + aOffset) % 360, 0, aServoAngle, -1000, 1000)
+            local elevationMapped = map_range(elevation + eOffset, 0, eServoAngle, -1000, 1000)
             
             --output mapped values to GVARs -----------------------------------------------------------------------------------------------------------------------
             model.setGlobalVariable(4, 0, azimuthMapped)-- model.setGlobalVariable(index, flight_mode, value), use 0 for GV1, 8 for GV9
